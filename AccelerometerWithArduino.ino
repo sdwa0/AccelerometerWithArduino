@@ -226,7 +226,6 @@ void loop() {
             return;
         }
     }
-    sensorLogFile.close();
     Serial.println("Data log file saved to SD card.");
 }
 
