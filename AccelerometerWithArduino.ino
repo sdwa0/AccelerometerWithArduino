@@ -6,7 +6,10 @@
 #define SDCS 4
 #define GreenLED 5
 #define Switch 7
-//Pin 10 through 13 for SPI communication
+//Pin 11 through 13 for communication with SPI bus
+//Pin 11 MOSI
+//Pin 12 MISO
+//Pin 13 CLK
 
 //<Analog Pins>
 //Pin 4 for SDA(data line)
