@@ -58,6 +58,9 @@ void dmpDataReady() {
 void setup() {
     pinMode(RedLED, OUTPUT);
     pinMode(GreenLED, OUTPUT);
+    pinMode(Switch, INPUT);
+
+    if ( !digitalRead(Switch) ) switchedOff();
     LEDs(1);
 
     // join I2C bus (I2Cdev library doesn't do this automatically)
@@ -149,6 +152,8 @@ void setup() {
 }
 
 void loop() {
+    if ( !digitalRead(Switch) ) switchedOff();
+
     //if setup had some errors, don't do anything
     if (!noErrors) return;
 
@@ -239,5 +244,17 @@ void LEDs(bool state)
   noErrors = state;
   digitalWrite(RedLED, !state);
   digitalWrite(GreenLED, state);
+}
+
+void switchedOff()
+{
+  while ( !digitalRead(Switch) ) {
+    //blink the Red LED
+    digitalWrite(RedLED, HIGH);
+    delay(1000);
+    digitalWrite(RedLED, LOW);
+    delay(1000);
+  }
+  return;
 }
 
