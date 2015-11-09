@@ -1,0 +1,1 @@
+This is the code I am using in my project in which I process the data obtained from a MPU6050 6-axis accelerometer using an Arduino UNO board and store it on an SD card in CSV format. I am using an Arduino Ethernet board for the SD card slot.
