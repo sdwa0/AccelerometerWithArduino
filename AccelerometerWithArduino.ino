@@ -28,7 +28,6 @@ File sensorLogFile;
 // class default I2C address is 0x68
 MPU6050 mpu;
 //#define OUTPUT_READABLE_YAWPITCHROLL
-bool blinkState = false;
 
 // MPU control/status vars
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -52,6 +51,10 @@ void dmpDataReady() {
 }
 
 void setup() {
+    pinMode(RedLED, OUTPUT);
+    pinMode(GreenLED, OUTPUT);
+    LEDs(1);
+
     // join I2C bus (I2Cdev library doesn't do this automatically)
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
@@ -67,6 +70,7 @@ void setup() {
     Serial.print("Initializing SD card...");
     if (!SD.begin(SDCS)) {
         Serial.println("SD card initialization failed!");
+        LEDs(0);
         return;
     }
     Serial.println("SD card initialization done.");
@@ -80,6 +84,7 @@ void setup() {
       sensorLogFile.close();
     } else {
       Serial.println("Error opening file");
+      LEDs(0);
       return;
     }
     
@@ -133,10 +138,9 @@ void setup() {
         Serial.print(F("DMP Initialization failed (code "));
         Serial.print(devStatus);
         Serial.println(F(")"));
+        LEDs(0);
         return;
     }
-
-    pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
@@ -215,13 +219,17 @@ void loop() {
             Serial.println(dataString);
         } else {
             Serial.println("Couldn't access file");
+            LEDs(0);
             return;
         }
-
-        // blink LED to indicate activity
-        blinkState = !blinkState;
-        digitalWrite(LED_PIN, blinkState);
     }
     sensorLogFile.close();
     Serial.println("Data log file saved to SD card.");
 }
+
+void LEDs(bool state)
+{
+  digitalWrite(RedLED, !state);
+  digitalWrite(GreenLED, state);
+}
+
