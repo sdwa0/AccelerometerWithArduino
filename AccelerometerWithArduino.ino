@@ -1,3 +1,17 @@
+//<<Pin Definitions>>
+//<Digital Pins>
+//Pin 0 and 1 for RX and TX for Serial communication
+//Pin 2 for INT
+#define RedLED 3
+#define SDCS 4
+#define GreenLED 5
+#define Switch 7
+//Pin 10 through 13 for SPI communication
+
+//<Analog Pins>
+//Pin 4 for SDA(data line)
+//Pin 5 for SCL(clock line)
+
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 //#include "MPU6050.h" // not necessary if using MotionApps include file
@@ -14,8 +28,6 @@ File sensorLogFile;
 // class default I2C address is 0x68
 MPU6050 mpu;
 //#define OUTPUT_READABLE_YAWPITCHROLL
-#define LED_PIN 13
-#define SDCS 4
 bool blinkState = false;
 
 // MPU control/status vars
