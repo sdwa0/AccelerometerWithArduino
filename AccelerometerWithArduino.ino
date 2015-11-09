@@ -48,6 +48,8 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
+bool noErrors = true;
+
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
 void dmpDataReady() {
     mpuInterrupt = true;
@@ -147,6 +149,9 @@ void setup() {
 }
 
 void loop() {
+    //if setup had some errors, don't do anything
+    if (!noErrors) return;
+
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {}
 
@@ -231,6 +236,7 @@ void loop() {
 
 void LEDs(bool state)
 {
+  noErrors = state;
   digitalWrite(RedLED, !state);
   digitalWrite(GreenLED, state);
 }
