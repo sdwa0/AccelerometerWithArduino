@@ -75,13 +75,13 @@ void setup() {
     Serial.begin(115200);
 
     //initialize SD card
-    Serial.print("Initializing SD card...");
+    Serial.print(F("Initializing SD card..."));
     if (!SD.begin(SDCS)) {
-        Serial.println("SD card initialization failed!");
+        Serial.println(F("SD card initialization failed!"));
         LEDs(0);
         return;
     }
-    Serial.println("SD card initialization done.");
+    Serial.println(F("SD card initialization done."));
 
     //open a file to write
     sensorLogFile = SD.open("log.csv", FILE_WRITE);  
@@ -91,7 +91,7 @@ void setup() {
       sensorLogFile.println("X, Y, Z");
       sensorLogFile.close();
     } else {
-      Serial.println("Error opening file");
+      Serial.println(F("Error opening file"));
       LEDs(0);
       return;
     }
@@ -188,11 +188,11 @@ void loop() {
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            Serial.print("ypr\t");
+            Serial.print(F("ypr\t"));
             Serial.print(ypr[0] * 180/M_PI);
-            Serial.print("\t");
+            Serial.print(F("\t"));
             Serial.print(ypr[1] * 180/M_PI);
-            Serial.print("\t");
+            Serial.print(F("\t"));
             Serial.println(ypr[2] * 180/M_PI);
             delay(1000);
         #endif
@@ -214,29 +214,29 @@ void loop() {
         Serial.print(aaReal.z);
         Serial.print("\t");
         */
-        Serial.print("aworld\t");
+        Serial.print(F("aworld\t"));
         Serial.print(aaWorld.x/8192.0);
-        Serial.print("\t");
+        Serial.print(F("\t"));
         Serial.print(aaWorld.y/8192.0);
-        Serial.print("\t");
+        Serial.print(F("\t"));
         Serial.println(aaWorld.z/8192.0);
 
         String dataString = String(aaWorld.x/8192.0) + ", " + String(aaWorld.y/8192.0) + ", " + String(aaWorld.z/8192.0);
 
         //write the sensor data to the opened file
-        Serial.print("Writing to file...");
+        Serial.print(F("Writing to file..."));
         sensorLogFile = SD.open("log.csv", FILE_WRITE);
         if (sensorLogFile) {
             sensorLogFile.println(dataString);
             sensorLogFile.close();
             Serial.println(dataString);
         } else {
-            Serial.println("Couldn't access file");
+            Serial.println(F("Couldn't access file"));
             LEDs(0);
             return;
         }
     }
-    Serial.println("Data log file saved to SD card.");
+    Serial.println(F("Data log file saved to SD card."));
 }
 
 void LEDs(bool state)
