@@ -248,6 +248,7 @@ void LEDs(bool state)
 
 void switchedOff()
 {
+  digitalWrite(GreenLED, LOW);
   while ( !digitalRead(Switch) ) {
     //blink the Red LED
     digitalWrite(RedLED, HIGH);
