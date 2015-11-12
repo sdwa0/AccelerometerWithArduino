@@ -49,6 +49,8 @@ float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
 bool noErrors = true;
+long startTime;
+unsigned long currentTime;
 
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
 void dmpDataReady() {
@@ -56,6 +58,8 @@ void dmpDataReady() {
 }
 
 void setup() {
+    startTime = millis();
+
     pinMode(RedLED, OUTPUT);
     pinMode(GreenLED, OUTPUT);
     pinMode(Switch, INPUT);
@@ -87,8 +91,8 @@ void setup() {
     sensorLogFile = SD.open("log.csv", FILE_WRITE);  
     // if the file opened okay, write to it:
     if ( sensorLogFile ) {
-      sensorLogFile.println(", , ,"); //Just a leading blank line, incase there was previous data
-      sensorLogFile.println("X, Y, Z");
+      sensorLogFile.println(", , , ,"); //Just a leading blank line, incase there was previous data
+      sensorLogFile.println("t, X, Y, Z");
       sensorLogFile.close();
     } else {
       Serial.println(F("Error opening file"));
@@ -176,6 +180,7 @@ void loop() {
         // wait for correct available data length, should be a VERY short wait
         while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
 
+        currentTime = millis() - startTime;
         // read a packet from FIFO
         mpu.getFIFOBytes(fifoBuffer, packetSize);
         
@@ -214,6 +219,8 @@ void loop() {
         Serial.print(aaReal.z);
         Serial.print("\t");
         */
+        Serial.print(F("t"));
+        Serial.print(currentTime);
         Serial.print(F("aworld\t"));
         Serial.print(aaWorld.x/8192.0);
         Serial.print(F("\t"));
@@ -221,7 +228,7 @@ void loop() {
         Serial.print(F("\t"));
         Serial.println(aaWorld.z/8192.0);
 
-        String dataString = String(aaWorld.x/8192.0) + ", " + String(aaWorld.y/8192.0) + ", " + String(aaWorld.z/8192.0);
+        String dataString = String(currentTime) + ", " + String(aaWorld.x/8192.0) + ", " + String(aaWorld.y/8192.0) + ", " + String(aaWorld.z/8192.0);
 
         //write the sensor data to the opened file
         Serial.print(F("Writing to file..."));
