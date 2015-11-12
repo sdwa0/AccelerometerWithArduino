@@ -219,6 +219,7 @@ void loop() {
         Serial.print(aaReal.z);
         Serial.print("\t");
         */
+        /*
         Serial.print(F("t"));
         Serial.print(currentTime);
         Serial.print(F("aworld\t"));
@@ -227,7 +228,7 @@ void loop() {
         Serial.print(aaWorld.y/8192.0);
         Serial.print(F("\t"));
         Serial.println(aaWorld.z/8192.0);
-
+        */
         String dataString = String(currentTime) + ", " + String(aaWorld.x/8192.0) + ", " + String(aaWorld.y/8192.0) + ", " + String(aaWorld.z/8192.0);
 
         //write the sensor data to the opened file
@@ -243,7 +244,6 @@ void loop() {
             return;
         }
     }
-    Serial.println(F("Data log file saved to SD card."));
 }
 
 void LEDs(bool state)
