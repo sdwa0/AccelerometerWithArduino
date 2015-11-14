@@ -108,14 +108,6 @@ void setup() {
     Serial.println(F("Testing device connections..."));
     Serial.println(mpu.testConnection() ? F("MPU6050 connection successful") : F("MPU6050 connection failed"));
 
-    // wait for ready
-    /*
-    Serial.println(F("\nSend any character to begin DMP programming and demo: "));
-    while (Serial.available() && Serial.read()); // empty buffer
-    while (!Serial.available());                 // wait for data
-    while (Serial.available() && Serial.read()); // empty buffer again
-    */
-
     // load and configure the DMP
     Serial.println(F("Initializing DMP..."));
     devStatus = mpu.dmpInitialize();
@@ -188,20 +180,6 @@ void loop() {
         // (this lets us immediately read more without waiting for an interrupt)
         fifoCount -= packetSize;
 
-        #ifdef OUTPUT_READABLE_YAWPITCHROLL
-            // display Euler angles in degrees
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            mpu.dmpGetGravity(&gravity, &q);
-            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            Serial.print(F("ypr\t"));
-            Serial.print(ypr[0] * 180/M_PI);
-            Serial.print(F("\t"));
-            Serial.print(ypr[1] * 180/M_PI);
-            Serial.print(F("\t"));
-            Serial.println(ypr[2] * 180/M_PI);
-            delay(1000);
-        #endif
-
         // display real acceleration, adjusted to remove gravity
         // display initial world-frame acceleration, adjusted to remove gravity
         // and rotated based on known orientation from quaternion
@@ -210,25 +188,7 @@ void loop() {
         mpu.dmpGetGravity(&gravity, &q);
         mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
         mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
-        /*
-        Serial.print("areal\t");
-        Serial.print(aaReal.x);
-        Serial.print("\t");
-        Serial.print(aaReal.y);
-        Serial.print("\t");
-        Serial.print(aaReal.z);
-        Serial.print("\t");
-        */
-        /*
-        Serial.print(F("t"));
-        Serial.print(currentTime);
-        Serial.print(F("aworld\t"));
-        Serial.print(aaWorld.x/8192.0);
-        Serial.print(F("\t"));
-        Serial.print(aaWorld.y/8192.0);
-        Serial.print(F("\t"));
-        Serial.println(aaWorld.z/8192.0);
-        */
+
         String dataString = String(currentTime) + ", " + String(aaWorld.x/8192.0) + ", " + String(aaWorld.y/8192.0) + ", " + String(aaWorld.z/8192.0);
 
         //write the sensor data to the opened file
