@@ -87,18 +87,10 @@ void setup() {
     }
     Serial.println(F("SD card initialization done."));
 
-    //open a file to write
-    sensorLogFile = SD.open("log.csv", FILE_WRITE);  
-    // if the file opened okay, write to it:
-    if ( sensorLogFile ) {
-      sensorLogFile.println(", , , ,"); //Just a leading blank line, incase there was previous data
-      sensorLogFile.println("t, X, Y, Z");
-    } else {
-      Serial.println(F("Error opening file"));
-      LEDs(0);
+    if ( !openFile() ) {
       return;
     }
-    
+
     // initialize device
     Serial.println(F("Initializing I2C devices..."));
     mpu.initialize();
@@ -219,5 +211,20 @@ void switchedOff()
     delay(1000);
   }
   return;
+}
+
+bool openFile()
+{
+  //open a file to write
+  sensorLogFile = SD.open("noclose.csv", FILE_WRITE);
+  if ( sensorLogFile ) {
+    sensorLogFile.println(", , , ,"); //Just a leading blank line, incase there was previous data
+    sensorLogFile.println("t, X, Y, Z");
+    return 1;
+  } else {
+    Serial.println(F("Error opening file"));
+    LEDs(0);
+    return 0;
+  }
 }
 
