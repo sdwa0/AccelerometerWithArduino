@@ -152,6 +152,7 @@ void loop() {
 
     //if setup had some errors, don't do anything
     if (!noErrors) return;
+    LEDs(1);
 
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {}
