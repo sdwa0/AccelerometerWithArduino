@@ -210,6 +210,9 @@ void switchedOff()
     digitalWrite(RedLED, LOW);
     delay(1000);
   }
+
+  //reopen the file for writing
+  openFile();
   return;
 }
 
