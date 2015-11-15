@@ -93,7 +93,6 @@ void setup() {
     if ( sensorLogFile ) {
       sensorLogFile.println(", , , ,"); //Just a leading blank line, incase there was previous data
       sensorLogFile.println("t, X, Y, Z");
-      sensorLogFile.close();
     } else {
       Serial.println(F("Error opening file"));
       LEDs(0);
@@ -194,16 +193,8 @@ void loop() {
 
         //write the sensor data to the opened file
         Serial.print(F("Writing to file..."));
-        sensorLogFile = SD.open("log.csv", FILE_WRITE);
-        if (sensorLogFile) {
             sensorLogFile.println(dataString);
-            sensorLogFile.close();
             Serial.println(dataString);
-        } else {
-            Serial.println(F("Couldn't access file"));
-            LEDs(0);
-            return;
-        }
     }
 }
 
@@ -216,6 +207,9 @@ void LEDs(bool state)
 
 void switchedOff()
 {
+  //if log file is open, then close it
+  if (sensorLogFile) { sensorLogFile.close(); }
+
   digitalWrite(GreenLED, LOW);
   while ( !digitalRead(Switch) ) {
     //blink the Red LED
