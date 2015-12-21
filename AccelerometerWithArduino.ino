@@ -179,9 +179,10 @@ void loop() {
         // and rotated based on known orientation from quaternion
         mpu.dmpGetQuaternion(&q, fifoBuffer);
         mpu.dmpGetAccel(&aa, fifoBuffer);
-        mpu.dmpGetGravity(&gravity, &q);
-        mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
-        mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
+        //mpu.dmpGetGravity(&gravity, &q);
+        //mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+        //mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
+        mpu.dmpGetLinearAccelInWorld(&aaWorld, &aa, &q);
 
         String dataString = String(currentTime) + ", " + String(aaWorld.x/8192.0) + ", " + String(aaWorld.y/8192.0) + ", " + String(aaWorld.z/8192.0);
 
