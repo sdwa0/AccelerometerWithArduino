@@ -109,6 +109,8 @@ void setup() {
     mpu.setZGyroOffset(-85);
     mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
 
+    mpu.setFullScaleAccelRange(MPU6050_ACCEL_FS_4);
+
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
         // turn on the DMP, now that it's ready
